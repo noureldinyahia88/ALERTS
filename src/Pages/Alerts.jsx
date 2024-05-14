@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Sidebar from "../Components/UiComponents/Sidebar";
 
 import alretImage from "../assets/L2.png";
 import searchImg from "../assets/Search.png";
+import AlertCard from "../Components/UiComponents/AlertCard";
+
 // Styled components for Alerts component
 const ParentWrapper = styled.div`
   display: grid;
@@ -21,7 +23,6 @@ const AlertsWrapper = styled.div`
   grid-column-gap: 28px;
 `;
 const EmptyeDiV = styled.div`
-  /* width: ; */
 `;
 const AlertHeader = styled.div`
   display: grid;
@@ -38,7 +39,6 @@ const PageNameWrapper = styled.div`
 `;
 
 const H2 = styled.h2`
-  /* Styles for the heading */
   font-size: 46px;
   color: #fff;
   font-weight: 700;
@@ -46,7 +46,6 @@ const H2 = styled.h2`
 `;
 
 const SearchWrapper = styled.div`
-  /* Styles for the search wrapper */
   display: flex;
   align-items: center;
   gap: 0;
@@ -54,7 +53,6 @@ const SearchWrapper = styled.div`
 `;
 
 const Input = styled.input`
-  /* Styles for the input field */
   padding: 8px 19px 8px 17px;
   border: none;
   border-radius: 5px;
@@ -62,7 +60,7 @@ const Input = styled.input`
   background-color: #313131;
   color: #ffff;
   &::placeholder {
-    color: #ffff; /* Set placeholder color to white */
+    color: #ffff; 
   }
   &:focus {
     outline: none;
@@ -81,7 +79,6 @@ const SearchIconBtn = styled.button`
 `;
 
 const AlertWrapper = styled.div`
-  /* margin-top: 16px; */
   position: relative;
   max-width: 38px;
   width: 100%;
@@ -107,35 +104,104 @@ const AlertImg = styled.img`
   height: 21px;
 `;
 
-const FilterWrapper = styled.div`
-  /* Styles for the filter wrapper */
+const FilterWrapper = styled.div``;
+const Wrapper = styled.div``;
+const Container = styled.div`
+  margin-left: 30px;
+  width: 100%;
+  padding: 20px;
+  overflow-y: scroll;
+  height: 85vh;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #424242;
+    border-radius: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    margin-top: 20px;
+
+    background-color: #202020;
+    border-radius: 6px;
+  }
 `;
+const EmptyDiv = styled.div``
 
 const Alerts = () => {
+
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const alertsData = [
+      { title: "AMZN", number: "200", number2: "-0.25 %", risk: "Low Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "TSLA", number: "200", number2: "-0.25 %", risk: "Low Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      { title: "ABQQ", number: "200", number2: "-0.25 %", risk: "High Risk" },
+      // Add more data as needed
+    ];
+  
+    const handleSearch = (e) => {
+      setSearchTerm(e.target.value.toLowerCase());
+    };
+  
+    const filteredAlerts = alertsData.filter((alert) =>
+      alert.title.toLowerCase().includes(searchTerm)
+    );
+
   return (
     <>
       <Sidebar />
       <ParentWrapper>
-        <EmptyeDiV></EmptyeDiV>
+        <EmptyDiv></EmptyDiv>
         <AlertsWrapper>
-          <AlertHeader>
-            <PageNameWrapper>
-              <H2>ALERTS</H2>
-            </PageNameWrapper>
-            <SearchWrapper>
-              <Input type="text" placeholder="Search By..." />
-              <SearchIconBtn>
-                <img src={searchImg} alt="" />
-              </SearchIconBtn>
-            </SearchWrapper>
-            <AlertWrapper>
-              <NumberWrapper>6</NumberWrapper>
-              <AlertImg src={alretImage} alt="" />
-            </AlertWrapper>
-          </AlertHeader>
-          <FilterWrapper>
+          <div>
+            <AlertHeader>
+              <PageNameWrapper>
+                <H2>ALERTS</H2>
+              </PageNameWrapper>
+              <SearchWrapper>
+                <Input
+                  type="text"
+                  placeholder="Search By..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                />
+                <SearchIconBtn>
+                  <img src={searchImg} alt="" />
+                </SearchIconBtn>
+              </SearchWrapper>
+              <AlertWrapper>
+                <NumberWrapper>{filteredAlerts.length}</NumberWrapper>
+                <AlertImg src={alretImage} alt="" />
+              </AlertWrapper>
+            </AlertHeader>
+            <Container>
+              {filteredAlerts.map((alert, index) => (
+                <AlertCard
+                  key={index}
+                  title={alert.title}
+                  number={alert.number}
+                  number2={alert.number2}
+                  risk={alert.risk}
+                />
+              ))}
+            </Container>
+          </div>
+          <div>
             {/* Additional content for FilterWrapper can be added here */}
-          </FilterWrapper>
+          </div>
         </AlertsWrapper>
       </ParentWrapper>
     </>
